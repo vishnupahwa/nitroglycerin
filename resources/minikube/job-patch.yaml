@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eznft
+spec:
+  template:
+    spec:
+      containers:
+        - name: eznft
+          imagePullPolicy: Never
+          env:
+            - name: MINIKUBE
+              value: "true"

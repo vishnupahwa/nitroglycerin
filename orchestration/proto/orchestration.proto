@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package orchestration;
+
+service Orchestrator {
+    // Sends results
+    rpc SendResults (stream Result) returns (Complete) {
+    }
+}
+
+message Result {
+    bytes json = 1;
+    string hostname = 2;
+}
+
+message Complete {
+    bool done = 1;
+}

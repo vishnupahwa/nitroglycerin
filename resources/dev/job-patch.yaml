@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eznft
+spec:
+  template:
+    spec:
+      containers:
+        - name: eznft
+          resources:
+            limits:
+              memory: 0.5Gi
+            requests:
+              cpu: 600m
+          image: gcr.io/phoenix-sandbox-one/eznft
+          args:
+            - orchestrate
+            - quick
+            - --image
+            - gcr.io/phoenix-sandbox-one/eznft

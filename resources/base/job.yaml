@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eznft
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: eznft
+    spec:
+      restartPolicy: Never
+      serviceAccountName: eznft-orchestrator
+      automountServiceAccountToken: true
+      containers:
+        - name: eznft
+          image: eznft
+          args:
+            - orchestrate
+            - quick
