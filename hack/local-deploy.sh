@@ -2,6 +2,7 @@
 set -euo pipefail
 
 # Requires ko & minikube
+# minikube start --cpus 3 --memory 8192
 eval $(minikube docker-env)
 ko publish ./cmd/eznft/ -L -B
 docker tag ko.local/eznft eznft

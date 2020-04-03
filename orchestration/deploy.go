@@ -99,11 +99,11 @@ func Run(spec NFTJob) (vegeta.Metrics, vegeta.Results) {
 			log.Println("Error watching jobs: ", err)
 			running = false
 		}
-		if *j.Status.Failed > 0 {
+		if j.Status != nil && *j.Status.Failed > 0 {
 			log.Println("Pod failed")
 			running = false
 		}
-		if *j.Status.Succeeded == spec.Pods {
+		if j.Status != nil && *j.Status.Succeeded == spec.Pods {
 			log.Println("All orchestrated pods succeeded!")
 			running = false
 			succeeded = true

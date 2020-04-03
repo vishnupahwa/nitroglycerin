@@ -27,7 +27,6 @@ func (s *Scenario) Run(ctx context.Context, name string, stream *orchestration.S
 	targeter := StaticInterceptedTargeter(s.TargetModifier, s.Targets...)
 	for i, stage := range s.Stages {
 		log.Println("Running stage " + strconv.Itoa(i))
-		must(stage.Before())
 		for res := range attacker.Attack(targeter, stage.StgPacer, stage.StgDuration, name) {
 			if stream != nil {
 				must(stream.SendResults(ctx, *res))
@@ -35,7 +34,6 @@ func (s *Scenario) Run(ctx context.Context, name string, stream *orchestration.S
 			run.Add(res)
 			metrics.Add(res)
 		}
-		must(stage.After())
 	}
 
 	run.Close()
@@ -66,7 +64,7 @@ func (s *Scenario) TotalTimeSeconds() int {
 
 func must(err error) {
 	if err != nil {
-		log.Fatalln("Failed to run stage: " + err.Error())
+		log.Fatalln("Failed to run stage due to stream: " + err.Error())
 	}
 }
 

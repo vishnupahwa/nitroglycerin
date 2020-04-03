@@ -3,6 +3,7 @@ package stages
 
 import (
 	vegeta "github.com/tsenart/vegeta/v12/lib"
+	"log"
 	"time"
 )
 
@@ -10,48 +11,51 @@ import (
 Stage represents the TPS approaching a target for a time period.
 For example the initial ramp up would be a separate stage to the constant load that follows for a peak load test. */
 type Stage struct {
-	Before func() error
 	// Target specifies the transaction per second target of this stage
 	Target int
 	// StgDuration is the total duration of this stage.
 	StgDuration time.Duration
 	// Pacer determines the slope for this stage
 	StgPacer vegeta.Pacer
-	After    func() error
 }
 
-// NewStage creates a stage with the provided target transactions per second,
-// aiming to either ramp to that rate or sustain that rate for a given stgDuration,
-// depending on the previous stage provided.
-func NewStage(target int, duration time.Duration, prev Stage) Stage {
-	pacer := pacerFrom(Stage{Target: target, StgDuration: duration}, prev)
-	return Stage{Before: NoOperation(), Target: target, StgDuration: duration, StgPacer: pacer, After: NoOperation()}
-}
-
-func pacerFrom(current, previous Stage) vegeta.Pacer {
-	if current.Target != previous.Target {
-		return current.rampFrom(previous)
+// NewRampingStage creates a stage with the provided target transactions per second
+// aiming to steadyily ramp to that rate from 0 over the ramp duration and then sustain
+// that rate for a given total duration
+func NewRampingStage(target int, ramp, total time.Duration) Stage {
+	pacer, err := NewSteadyUp(
+		vegeta.Rate{
+			Freq: 1,
+			Per:  time.Second,
+		},
+		vegeta.Rate{
+			Freq: target,
+			Per:  time.Second,
+		},
+		ramp)
+	if err != nil {
+		log.Fatal("Failed to create stage: " + err.Error())
 	}
-	return vegeta.ConstantPacer{
-		Freq: current.Target,
-		Per:  1 * time.Second,
+	return Stage{
+		Target:      target,
+		StgDuration: total,
+		StgPacer:    pacer,
 	}
 }
 
-func (s *Stage) rampFrom(previous Stage) vegeta.Pacer {
-	return vegeta.LinearPacer{
-		StartAt: vegeta.Rate{Freq: previous.Target, Per: 1 * time.Second},
-		Slope:   calculateSlope(previous.Target, s.Target, s.StgDuration),
+func NewRampDownStage(total time.Duration, prev Stage) Stage {
+	return Stage{
+		Target:      0,
+		StgDuration: total,
+		StgPacer: vegeta.LinearPacer{
+			StartAt: vegeta.Rate{
+				Freq: prev.Target, Per: time.Second,
+			},
+			Slope: calculateSlope(prev.Target, 0, total),
+		},
 	}
 }
 
 func calculateSlope(base int, target int, duration time.Duration) float64 {
 	return float64(target-base) / (duration.Seconds())
-}
-
-func NoOperation() func() error {
-	return func() error {
-		// Do nothing
-		return nil
-	}
 }

@@ -7,7 +7,19 @@ spec:
     spec:
       containers:
         - name: eznft
+          args:
+            - orchestrate
+            - slow
+            - --cpu
+            - "300m"
+            - --memory
+            - "0.5Gi"
           imagePullPolicy: Never
           env:
             - name: MINIKUBE
               value: "true"
+          resources:
+            requests:
+              cpu: "500m"
+            limits:
+              memory: "1Gi"

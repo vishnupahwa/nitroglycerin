@@ -13,16 +13,14 @@ import (
 func quick() scenario.Scenario {
 	return scenario.Scenario{
 		Stages: stages.Builder().
-			// Ramp up to 100 TPS
-			Add(10, 5*time.Second).
-			// Constant 100 TPS
-			Add(10, 20*time.Second).
+			// Ramp up to 10 TPS over 5 seconds and sustain for 20 seconds
+			RampUpAndSustain(10, 5*time.Second, 20*time.Second).
 			// Ramp down to 0 TPS
-			Add(0, 10*time.Second).
+			RampDown(5 * time.Second).
 			Build(),
 		Targets: []vegeta.Target{{
 			Method: "POST",
-			URL:    "https://sps-lite-2-r2oihcniea-ew.a.run.app/playout/live",
+			URL:    "https://echo-r2oihcniea-ew.a.run.app/playout/live",
 			Body:   createBody(),
 			Header: createHeaders(),
 		}},

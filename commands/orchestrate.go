@@ -39,7 +39,7 @@ func addOrchestrate(topLevel *cobra.Command) {
 }
 
 func orchestrate(name string, opts *options.Orchestration) error {
-	s, ok := definitions.NFT[name]
+	_, ok := definitions.NFT[name]
 	if !ok {
 		return errors.New(fmt.Sprintf("Scenario %s not found. Possible options: %v", name, getKeys(definitions.NFT)))
 	}
@@ -47,9 +47,6 @@ func orchestrate(name string, opts *options.Orchestration) error {
 	now := time.Now()
 	startAt := orchestration.CalculateStartAt(now, 2)
 	log.Printf("Scenario execution %s starting at %v", name, time.Unix(startAt, 0))
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
-	s.StartProgressBar(ticker)
 	spec := orchestration.NFTJob{
 		Scenario:        name,
 		Pods:            opts.Pods,

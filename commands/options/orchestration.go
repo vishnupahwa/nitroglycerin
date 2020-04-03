@@ -30,5 +30,5 @@ func AddCPURequestArg(cmd *cobra.Command, r *Orchestration) {
 }
 
 func AddMemoryLimitsArg(cmd *cobra.Command, r *Orchestration) {
-	cmd.Flags().StringVarP(&r.MemoryLimits, "m", "m", "0.5Gi", "Memory resource limits of pods")
+	cmd.Flags().StringVarP(&r.MemoryLimits, "memory", "m", "0.5Gi", "Memory resource limits of pods")
 }
