@@ -24,8 +24,8 @@ type StageToBe func(multiplier float64, prev Stage) Stage
 
 // NewRampingStage creates a stage with the provided target transactions per second
 // aiming to steadyily ramp to that rate from 0 over the ramp duration and then sustain
-// that rate for a given total duration
-func NewRampingStage(target int, ramp, total time.Duration) Stage {
+// that rate for a given sustain duration
+func NewRampingStage(target int, ramp, sustain time.Duration) Stage {
 	pacer, err := NewSteadyUp(
 		vegeta.Rate{
 			Freq: 1,
@@ -41,7 +41,7 @@ func NewRampingStage(target int, ramp, total time.Duration) Stage {
 	}
 	return Stage{
 		Target:      target,
-		StgDuration: total,
+		StgDuration: ramp + sustain,
 		StgPacer:    pacer,
 	}
 }

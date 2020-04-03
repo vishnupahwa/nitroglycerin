@@ -9,12 +9,14 @@ spec:
         - name: eznft
           resources:
             limits:
-              memory: 0.5Gi
+              memory: 1Gi
             requests:
-              cpu: 600m
+              cpu: "3"
           image: eznft
           args:
             - orchestrate
-            - quick
+            - slow
+            - --pods
+            - "18"
             - --image
-            - registry.tools.cosmic.sky/phoenix/test/eznft
+            - "registry.tools.cosmic.sky/phoenix/test/eznft:latest"

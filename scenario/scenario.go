@@ -28,10 +28,9 @@ type Scenario struct {
 
 // Run runs the scenario with the given multiplier.
 // If an orchestration stream is provided, all results will be sent there instead of being written to a file
-func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, stream *orchestration.Stream) vegeta.Results {
+func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, stream *orchestration.Stream) vegeta.Metrics {
 	s.stages = s.StagesToBe.Build(multiplier)
 
-	run := vegeta.Results{}
 	metrics := vegeta.Metrics{}
 
 	attacker := vegeta.NewAttacker()
@@ -42,19 +41,17 @@ func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, str
 			if stream != nil {
 				must(stream.SendResults(ctx, *res))
 			}
-			run.Add(res)
 			metrics.Add(res)
 		}
 	}
 
-	run.Close()
 	metrics.Close()
 	if stream != nil {
 		must(stream.Finish(ctx))
 	}
 	reporter := vegeta.NewTextReporter(&metrics)
 	_ = reporter.Report(os.Stdout)
-	return run
+	return metrics
 }
 
 func (s *Scenario) StartProgressBar(ticker *time.Ticker) {

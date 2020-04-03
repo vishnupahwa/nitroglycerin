@@ -13,9 +13,9 @@ func Builder() *B {
 	return &B{}
 }
 
-func (b *B) RampUpAndSustain(target int, ramp, total time.Duration) *B {
+func (b *B) RampUpAndSustain(target int, ramp, sustain time.Duration) *B {
 	b.stagesToBe = append(b.stagesToBe, func(multiplier float64, _ Stage) Stage {
-		return NewRampingStage(int(float64(target)*multiplier), ramp, total)
+		return NewRampingStage(int(float64(target)*multiplier), ramp, sustain)
 	})
 	return b
 }

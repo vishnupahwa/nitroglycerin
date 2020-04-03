@@ -28,7 +28,7 @@ func Run(spec NFTJob) (vegeta.Metrics, vegeta.Results) {
 	jobRef := &batchv1.Job{Metadata: &metav1.ObjectMeta{Name: k8s.String(spec.Scenario), Namespace: k8s.String(client.Namespace)}}
 	_ = client.Delete(context.Background(), jobRef)
 
-	pullPolicy := k8s.String("IfNotPresent")
+	pullPolicy := k8s.String("Always")
 	if _, isMinikube := os.LookupEnv("MINIKUBE"); isMinikube {
 		pullPolicy = k8s.String("Never")
 	}

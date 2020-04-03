@@ -10,8 +10,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"log"
-	"os"
-	"strconv"
 	"time"
 )
 
@@ -57,12 +55,7 @@ func start(name string, scenarioOpts *options.Scenario) error {
 
 	log.Println("Running NFT " + name)
 
-	results := s.Run(ctx, name, scenarioOpts.Multiplier, stream(scenarioOpts, ctx))
-	file, err := os.Create("nft-results-" + name + "-" + strconv.FormatInt(now.Unix(), 10) + ".csv")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	scenario.WriteResults(file, results)
+	s.Run(ctx, name, scenarioOpts.Multiplier, stream(scenarioOpts, ctx))
 	return nil
 }
 
