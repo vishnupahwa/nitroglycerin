@@ -1,5 +1,3 @@
-package stages
-
 /*
 Copyright 2019 The Knative Authors
 
@@ -17,6 +15,7 @@ limitations under the License.
 
 Modified: Rate() method added to fulfill vegeta.Pacer interface
 */
+package stages
 
 import (
 	"errors"

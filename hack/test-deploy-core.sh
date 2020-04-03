@@ -6,7 +6,7 @@ CONTEXT=$1
 SHORT_SHA=$(git rev-parse --short HEAD)
 export KO_DOCKER_REPO=registry.tools.cosmic.sky/phoenix/test
 
-# Requires ko & minikube
+# Requires ko, kustomize & kubectl
 ko publish ./cmd/eznft/ -B -t ${SHORT_SHA} -t latest
 
 kubectl --context=${CONTEXT} delete job eznft --ignore-not-found=true
