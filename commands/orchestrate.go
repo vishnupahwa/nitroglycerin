@@ -33,7 +33,8 @@ func addOrchestrate(topLevel *cobra.Command) {
 	options.AddPodsArg(orchCmd, orchestrationOpts)
 	options.AddImageArg(orchCmd, orchestrationOpts)
 	options.AddSelfURIArg(orchCmd, orchestrationOpts)
-	options.AddStoreArg(orchCmd, orchestrationOpts)
+	options.AddCPURequestArg(orchCmd, orchestrationOpts)
+	options.AddMemoryLimitsArg(orchCmd, orchestrationOpts)
 	topLevel.AddCommand(orchCmd)
 }
 
@@ -53,8 +54,8 @@ func orchestrate(name string, opts *options.Orchestration) error {
 		Scenario:        name,
 		Pods:            opts.Pods,
 		Image:           opts.Image,
-		MemoryLimit:     "0.5Gi",
-		CPURequest:      "500m",
+		CPURequest:      opts.CPURequests,
+		MemoryLimit:     opts.MemoryLimits,
 		StartTime:       startAt,
 		OrchestratorUri: opts.SelfURI,
 	}
