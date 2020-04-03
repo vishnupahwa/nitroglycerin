@@ -12,9 +12,9 @@ spec:
               memory: 0.5Gi
             requests:
               cpu: 600m
-          image: gcr.io/phoenix-sandbox-one/eznft
+          image: eznft
           args:
             - orchestrate
             - quick
             - --image
-            - gcr.io/phoenix-sandbox-one/eznft
+            - registry.tools.cosmic.sky/phoenix/test/eznft

@@ -13,13 +13,21 @@ import (
 	"time"
 )
 
+// Scenario defines a single non-functional test scenario to be ran or orchestrated.
+// It is made up of 'stages' and targets to be hit.
 type Scenario struct {
-	StagesToBe     *stages.B
-	stages         []stages.Stage
-	Targets        []vegeta.Target
+	// StagesToBe is a builder that returns a list of stages after being modified with a multiplier
+	StagesToBe *stages.B
+	// Targets specify the endpoints to be hit
+	Targets []vegeta.Target
+	// TargetModifier modifies the endpoints before being used. Must be safe for concurrent use.
 	TargetModifier func(target vegeta.Target) vegeta.Target
+	// stages should be populated via building StagesToBe
+	stages []stages.Stage
 }
 
+// Run runs the scenario with the given multiplier.
+// If an orchestration stream is provided, all results will be sent there instead of being written to a file
 func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, stream *orchestration.Stream) vegeta.Results {
 	s.stages = s.StagesToBe.Build(multiplier)
 

@@ -16,7 +16,7 @@ import (
 )
 
 // addStart adds the primary start command to a top level command.
-//This is the entrypoint command for starting a controlled application.
+// This is the entrypoint command for starting a controlled application.
 func addStart(topLevel *cobra.Command) {
 	scenarioOpts := &options.Scenario{}
 
