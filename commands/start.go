@@ -38,6 +38,7 @@ func addStart(topLevel *cobra.Command) {
 	options.AddStartAtArg(startCmd, scenarioOpts)
 	options.AddStartNextArg(startCmd, scenarioOpts)
 	options.AddUploadURIArg(startCmd, scenarioOpts)
+	options.AddMultiplierArg(startCmd, scenarioOpts)
 	topLevel.AddCommand(startCmd)
 }
 
@@ -56,7 +57,7 @@ func start(name string, scenarioOpts *options.Scenario) error {
 
 	log.Println("Running NFT " + name)
 
-	results := s.Run(ctx, name, stream(scenarioOpts, ctx))
+	results := s.Run(ctx, name, scenarioOpts.Multiplier, stream(scenarioOpts, ctx))
 	file, err := os.Create("nft-results-" + name + "-" + strconv.FormatInt(now.Unix(), 10) + ".csv")
 	if err != nil {
 		log.Fatalln(err)

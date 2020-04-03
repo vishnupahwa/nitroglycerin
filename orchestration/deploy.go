@@ -54,6 +54,8 @@ func Run(spec NFTJob) (vegeta.Metrics, vegeta.Results) {
 								strconv.FormatInt(spec.StartTime, 10),
 								"--upload-uri",
 								spec.OrchestratorUri,
+								"--multiplier",
+								fmt.Sprintf("%.2f", 1/float64(spec.Pods)),
 							},
 							ImagePullPolicy: pullPolicy,
 							Resources: &corev1.ResourceRequirements{

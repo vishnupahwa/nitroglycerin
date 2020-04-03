@@ -14,18 +14,21 @@ import (
 )
 
 type Scenario struct {
-	Stages         []stages.Stage
+	StagesToBe     *stages.B
+	stages         []stages.Stage
 	Targets        []vegeta.Target
 	TargetModifier func(target vegeta.Target) vegeta.Target
 }
 
-func (s *Scenario) Run(ctx context.Context, name string, stream *orchestration.Stream) vegeta.Results {
+func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, stream *orchestration.Stream) vegeta.Results {
+	s.stages = s.StagesToBe.Build(multiplier)
+
 	run := vegeta.Results{}
 	metrics := vegeta.Metrics{}
 
 	attacker := vegeta.NewAttacker()
 	targeter := StaticInterceptedTargeter(s.TargetModifier, s.Targets...)
-	for i, stage := range s.Stages {
+	for i, stage := range s.stages {
 		log.Println("Running stage " + strconv.Itoa(i))
 		for res := range attacker.Attack(targeter, stage.StgPacer, stage.StgDuration, name) {
 			if stream != nil {
@@ -56,7 +59,7 @@ func (s *Scenario) StartProgressBar(ticker *time.Ticker) {
 
 func (s *Scenario) TotalTimeSeconds() int {
 	total := 0
-	for _, stage := range s.Stages {
+	for _, stage := range s.stages {
 		total += int(stage.StgDuration.Seconds())
 	}
 	return total

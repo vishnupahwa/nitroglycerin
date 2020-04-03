@@ -19,6 +19,9 @@ type Stage struct {
 	StgPacer vegeta.Pacer
 }
 
+// StageToBe returns a stage after it has been modifier with a target multiplier
+type StageToBe func(multiplier float64, prev Stage) Stage
+
 // NewRampingStage creates a stage with the provided target transactions per second
 // aiming to steadyily ramp to that rate from 0 over the ramp duration and then sustain
 // that rate for a given total duration

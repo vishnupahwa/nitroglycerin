@@ -7,9 +7,10 @@ import (
 
 // Run struct contains options regarding the scenario
 type Scenario struct {
-	StartAt   int64
-	StartNext int
-	UploadURI string
+	StartAt    int64
+	StartNext  int
+	UploadURI  string
+	Multiplier float64
 }
 
 func AddStartAtArg(cmd *cobra.Command, r *Scenario) {
@@ -22,4 +23,8 @@ func AddStartNextArg(cmd *cobra.Command, r *Scenario) {
 
 func AddUploadURIArg(cmd *cobra.Command, r *Scenario) {
 	cmd.Flags().StringVarP(&r.UploadURI, "upload-uri", "u", "", "URI for uploading results")
+}
+
+func AddMultiplierArg(cmd *cobra.Command, r *Scenario) {
+	cmd.Flags().Float64VarP(&r.Multiplier, "multiplier", "m", 1, "Multiplier for targets for all stages of a scenario")
 }
