@@ -54,11 +54,7 @@ func NewRampDownStage(total time.Duration, prev Stage) Stage {
 			StartAt: vegeta.Rate{
 				Freq: prev.Target, Per: time.Second,
 			},
-			Slope: calculateSlope(prev.Target, 0, total),
+			Slope: float64(-prev.Target) / (total.Seconds()),
 		},
 	}
-}
-
-func calculateSlope(base int, target int, duration time.Duration) float64 {
-	return float64(target-base) / (duration.Seconds())
 }
