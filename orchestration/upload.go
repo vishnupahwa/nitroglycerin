@@ -42,7 +42,7 @@ func (c *Stream) SendResults(ctx context.Context, result vegeta.Result) error {
 	})
 }
 
-func (c *Stream) Finish(ctx context.Context) error {
+func (c *Stream) Close(ctx context.Context) error {
 	defer c.clc.Close()
 	_, err := c.sender.CloseAndRecv()
 	if err != nil {

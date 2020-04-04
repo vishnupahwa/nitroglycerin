@@ -55,11 +55,11 @@ func start(name string, scenarioOpts *options.Scenario) error {
 
 	log.Println("Running NFT " + name)
 
-	s.Run(ctx, name, scenarioOpts.Multiplier, stream(scenarioOpts, ctx))
+	s.Run(ctx, name, scenarioOpts.Multiplier, stream(name, scenarioOpts, ctx))
 	return nil
 }
 
-func stream(scenarioOpts *options.Scenario, ctx context.Context) *orchestration.Stream {
+func stream(name string, scenarioOpts *options.Scenario, ctx context.Context) scenario.Stream {
 	if scenarioOpts.UploadURI != "" {
 		stream, err := orchestration.EstablishStream(scenarioOpts.UploadURI, ctx)
 		if err != nil {
@@ -67,7 +67,7 @@ func stream(scenarioOpts *options.Scenario, ctx context.Context) *orchestration.
 		}
 		return stream
 	}
-	return nil
+	return scenario.EstablishCSV(name, time.Now())
 }
 
 func getKeys(m map[string]scenario.Scenario) []string {

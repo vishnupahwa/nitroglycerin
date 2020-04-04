@@ -22,7 +22,7 @@ func AddStartNextArg(cmd *cobra.Command, r *Scenario) {
 }
 
 func AddUploadURIArg(cmd *cobra.Command, r *Scenario) {
-	cmd.Flags().StringVarP(&r.UploadURI, "upload-uri", "u", "", "URI for uploading results")
+	cmd.Flags().StringVarP(&r.UploadURI, "upload-uri", "u", "", "URI for streaming results via GRPC")
 }
 
 func AddMultiplierArg(cmd *cobra.Command, r *Scenario) {
