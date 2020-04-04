@@ -8,8 +8,12 @@ with all required information
 - Allow tweaking different things through both code and yaml
 - Add assertions on metric results
 
-- Add testing
+- Add missing tests
 - Add e2e tests with fake app
+
+- Add versioning information through code generation, a
+real container image default for jobs and 
+versioning scripts in ./hack folder
 
 - Add throttling/before/after stage functions that
  run parallel rather than in between stages 

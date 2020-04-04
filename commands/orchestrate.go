@@ -18,7 +18,13 @@ func addOrchestrate(topLevel *cobra.Command) {
 	orchCmd := &cobra.Command{
 		Use:   "orchestrate <name>",
 		Short: "Orchestrate an NFT scenario",
-		Long: `Orchestrate an NFT scenario, creating distributed load through 
+		Long: `Orchestrate an NFT scenario, creating distributed load through a Kubernetes Job.
+
+Creates a Kubernetes job which spins up pods for load testing the specified scenario. 
+Starts up a GRPC server which the pods stream their load results to. After all pods have
+completed, the results are sorted and used to calculate an overall report.
+
+This command itself must be run as a Kubernetes job. 
 `,
 		Run: func(cmd *cobra.Command, args []string) {
 			err := orchestrate(args[0], orchestrationOpts)
@@ -26,8 +32,7 @@ func addOrchestrate(topLevel *cobra.Command) {
 				log.Fatal(err)
 			}
 		},
-		Args:    cobra.ExactArgs(1),
-		Aliases: []string{"init", "run"},
+		Args: cobra.ExactArgs(1),
 	}
 
 	options.AddPodsArg(orchCmd, orchestrationOpts)
