@@ -40,7 +40,7 @@ func TestScenario_Run(t *testing.T) {
 		Targets: []vegeta.Target{{Method: "GET", URL: server.URL}},
 	}
 	stream := &testStream{}
-	run := s.Run(context.Background(), "test", 1, stream)
+	run := s.Run(context.Background(), "test", 1, "", stream)
 	check.Equals(t, 1.00, run.Success)
 	check.Equals(t, 1, len(stream.results))
 }

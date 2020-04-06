@@ -7,10 +7,11 @@ import (
 
 // Run struct contains options regarding the scenario
 type Scenario struct {
-	StartAt    int64
-	StartNext  int
-	UploadURI  string
-	Multiplier float64
+	StartAt        int64
+	StartNext      int
+	UploadURI      string
+	Multiplier     float64
+	TargetOverride string
 }
 
 func AddStartAtArg(cmd *cobra.Command, r *Scenario) {
@@ -27,4 +28,8 @@ func AddUploadURIArg(cmd *cobra.Command, r *Scenario) {
 
 func AddMultiplierArg(cmd *cobra.Command, r *Scenario) {
 	cmd.Flags().Float64VarP(&r.Multiplier, "multiplier", "m", 1, "Multiplier for targets for all stages of a scenario")
+}
+
+func AddTargetOverrideArg(cmd *cobra.Command, r *Scenario) {
+	cmd.Flags().StringVarP(&r.TargetOverride, "target-override", "t", "", "Override Target URI for all scenarios")
 }

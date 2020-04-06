@@ -8,4 +8,5 @@ type NFTJob struct {
 	CPURequest      string
 	StartTime       int64
 	OrchestratorUri string
+	Args            []string
 }

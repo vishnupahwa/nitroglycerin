@@ -41,6 +41,7 @@ This command itself must be run as a Kubernetes job.
 	options.AddSelfURIArg(orchCmd, orchestrationOpts)
 	options.AddCPURequestArg(orchCmd, orchestrationOpts)
 	options.AddMemoryLimitsArg(orchCmd, orchestrationOpts)
+	options.AddForwardedArgsArg(orchCmd, orchestrationOpts)
 	topLevel.AddCommand(orchCmd)
 }
 
@@ -63,6 +64,7 @@ func orchestrate(name string, opts *options.Orchestration) error {
 		MemoryLimit:     opts.MemoryLimits,
 		StartTime:       startAt,
 		OrchestratorUri: opts.SelfURI,
+		Args:            opts.Args,
 	}
 	_, err := orchestration.Run(job.CreateClient(), spec)
 	return err

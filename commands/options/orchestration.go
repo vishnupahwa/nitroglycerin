@@ -11,6 +11,7 @@ type Orchestration struct {
 	CPURequests  string
 	MemoryLimits string
 	SelfURI      string
+	Args         []string
 }
 
 func AddPodsArg(cmd *cobra.Command, r *Orchestration) {
@@ -31,4 +32,8 @@ func AddCPURequestArg(cmd *cobra.Command, r *Orchestration) {
 
 func AddMemoryLimitsArg(cmd *cobra.Command, r *Orchestration) {
 	cmd.Flags().StringVarP(&r.MemoryLimits, "memory", "m", "0.5Gi", "Memory resource limits of pods")
+}
+
+func AddForwardedArgsArg(cmd *cobra.Command, r *Orchestration) {
+	cmd.Flags().StringSliceVarP(&r.Args, "args", "a", nil, "Args to forward to orchestrated pods")
 }

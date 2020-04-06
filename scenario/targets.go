@@ -2,10 +2,18 @@ package scenario
 
 import (
 	vegeta "github.com/tsenart/vegeta/v12/lib"
+	"log"
 	"sync/atomic"
 )
 
-func StaticInterceptedTargeter(interceptor func(tgt vegeta.Target) vegeta.Target, tgts ...vegeta.Target) vegeta.Targeter {
+func StaticInterceptedTargeter(override string, interceptor func(tgt vegeta.Target) vegeta.Target, tgts ...vegeta.Target) vegeta.Targeter {
+	if override != "" {
+		log.Println("Overriding all target URIs with " + override)
+		for i, tgt := range tgts {
+			tgt.URL = override
+			tgts[i] = tgt
+		}
+	}
 	if interceptor == nil {
 		return vegeta.NewStaticTargeter(tgts...)
 	}

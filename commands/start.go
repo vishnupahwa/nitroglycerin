@@ -37,6 +37,7 @@ func addStart(topLevel *cobra.Command) {
 	options.AddStartNextArg(startCmd, scenarioOpts)
 	options.AddUploadURIArg(startCmd, scenarioOpts)
 	options.AddMultiplierArg(startCmd, scenarioOpts)
+	options.AddTargetOverrideArg(startCmd, scenarioOpts)
 	topLevel.AddCommand(startCmd)
 }
 
@@ -55,7 +56,7 @@ func start(name string, scenarioOpts *options.Scenario) error {
 
 	log.Println("Running NFT " + name)
 
-	s.Run(ctx, name, scenarioOpts.Multiplier, stream(name, scenarioOpts, ctx))
+	s.Run(ctx, name, scenarioOpts.Multiplier, scenarioOpts.TargetOverride, stream(name, scenarioOpts, ctx))
 	return nil
 }
 

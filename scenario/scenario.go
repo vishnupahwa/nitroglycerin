@@ -29,13 +29,13 @@ type Stream interface {
 }
 
 // Run runs the scenario with the given multiplier, sending all results to the provided stream.
-func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, stream Stream) vegeta.Metrics {
+func (s *Scenario) Run(ctx context.Context, name string, multiplier float64, override string, stream Stream) vegeta.Metrics {
 	s.stages = s.StagesToBe.Build(multiplier)
 
 	metrics := vegeta.Metrics{}
 
 	attacker := vegeta.NewAttacker()
-	targeter := StaticInterceptedTargeter(s.TargetModifier, s.Targets...)
+	targeter := StaticInterceptedTargeter(override, s.TargetModifier, s.Targets...)
 	for i, stage := range s.stages {
 		log.Println("Running stage " + strconv.Itoa(i))
 		for res := range attacker.Attack(targeter, stage.StgPacer, stage.StgDuration, name) {

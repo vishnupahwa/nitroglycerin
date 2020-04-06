@@ -37,6 +37,16 @@ func (c *Client) jobFrom(spec orchestration.NFTJob) *batchv1.Job {
 	if _, isMinikube := os.LookupEnv("MINIKUBE"); isMinikube {
 		pullPolicy = k8s.String("Never")
 	}
+	args := []string{
+		"start",
+		spec.Scenario,
+		"--start-at",
+		strconv.FormatInt(spec.StartTime, 10),
+		"--upload-uri",
+		spec.OrchestratorUri,
+		"--multiplier",
+		fmt.Sprintf("%.2f", 1/float64(spec.Pods)),
+	}
 	return &batchv1.Job{
 		Metadata: &metav1.ObjectMeta{
 			Name:      k8s.String(spec.Scenario),
@@ -50,18 +60,9 @@ func (c *Client) jobFrom(spec orchestration.NFTJob) *batchv1.Job {
 				Spec: &corev1.PodSpec{
 					Containers: []*corev1.Container{
 						{
-							Name:  k8s.String(spec.Scenario),
-							Image: k8s.String(spec.Image),
-							Args: []string{
-								"start",
-								spec.Scenario,
-								"--start-at",
-								strconv.FormatInt(spec.StartTime, 10),
-								"--upload-uri",
-								spec.OrchestratorUri,
-								"--multiplier",
-								fmt.Sprintf("%.2f", 1/float64(spec.Pods)),
-							},
+							Name:            k8s.String(spec.Scenario),
+							Image:           k8s.String(spec.Image),
+							Args:            append(args, spec.Args...),
 							ImagePullPolicy: pullPolicy,
 							Resources: &corev1.ResourceRequirements{
 								Limits: map[string]*resource.Quantity{

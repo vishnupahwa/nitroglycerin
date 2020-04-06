@@ -20,3 +20,5 @@ spec:
             - "18"
             - --image
             - "registry.tools.cosmic.sky/phoenix/test/eznft:latest"
+            - --args
+            - "--target-override=https://example.com"

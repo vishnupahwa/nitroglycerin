@@ -8,9 +8,11 @@ with all required information
 - Allow tweaking different things through both code and yaml
 - Add assertions on metric results
 
-- Add missing tests
 - Add e2e tests with fake app
-
+  - test --args are passed from orchestration to pods
+  - test distributed rate is correct
+  - test NFT results are concatenated correctly
+  
 - Use gobbing instead of JSON for grpc
 - Add versioning information through code generation, a
 real container image default for jobs and 
