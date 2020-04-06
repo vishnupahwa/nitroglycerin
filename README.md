@@ -9,6 +9,9 @@ with all required information
 - Add assertions on metric results
 
 - Add e2e tests with fake app
+  - replace bash/binary commands with kubernetes real API library:
+    - use kustomize to build the resource but parse it into Go structs
+    - Apply all structs & watch job.
   - test --args are passed from orchestration to pods
   - test distributed rate is correct
   - test NFT results are concatenated correctly

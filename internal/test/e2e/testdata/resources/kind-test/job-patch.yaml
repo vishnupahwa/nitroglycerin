@@ -9,11 +9,11 @@ spec:
         - name: eznft
           args:
             - orchestrate
-            - quick
+            - example
             - --pods
             - "2"
             - --args
-            - "--target-override=http://example.com"
+            - "--target-override=http://hits"
           imagePullPolicy: Never
           env:
             - name: MINIKUBE

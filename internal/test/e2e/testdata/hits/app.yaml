@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hits
+  labels:
+    app: hits
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hits
+      labels:
+        app: hits
+    spec:
+      containers:
+        - name: hits
+          image: hits
+          imagePullPolicy: Never
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: hits
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hits
+spec:
+  selector:
+    app: hits
+  ports:
+    - port: 80
+      targetPort: 8080
