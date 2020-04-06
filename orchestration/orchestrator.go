@@ -1,11 +1,15 @@
 package orchestration
 
 import (
+	"context"
 	"encoding/json"
 	pb "eznft/orchestration/proto"
+	"fmt"
 	vegeta "github.com/tsenart/vegeta/v12/lib"
+	"google.golang.org/grpc"
 	"io"
 	"log"
+	"net"
 	"sync/atomic"
 )
 
@@ -53,4 +57,27 @@ func (o *Orchestrator) SendResults(s pb.Orchestrator_SendResultsServer) error {
 func (o *Orchestrator) Close() {
 	o.metrics.Close()
 	close(o.results)
+}
+
+func startUploadServer() (*Orchestrator, context.CancelFunc) {
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	grpcServer := grpc.NewServer()
+	orchestrator := NewOrchestrator()
+	pb.RegisterOrchestratorServer(grpcServer, orchestrator)
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 8080))
+	if err != nil {
+		log.Fatalln("Could not start listening on 8080: " + err.Error())
+	}
+	go func() {
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Printf("grpcServer: Serve() error: %s", err)
+		}
+	}()
+	go func() {
+		<-ctx.Done()
+		println("Stopping GRPC Server")
+		grpcServer.GracefulStop()
+	}()
+	return orchestrator, cancelFunc
 }

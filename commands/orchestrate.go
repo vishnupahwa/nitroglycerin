@@ -4,6 +4,7 @@ import (
 	"errors"
 	"eznft/commands/options"
 	"eznft/definitions"
+	"eznft/job"
 	"eznft/orchestration"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -63,6 +64,6 @@ func orchestrate(name string, opts *options.Orchestration) error {
 		StartTime:       startAt,
 		OrchestratorUri: opts.SelfURI,
 	}
-	orchestration.Run(spec)
-	return nil
+	_, err := orchestration.Run(job.CreateClient(), spec)
+	return err
 }

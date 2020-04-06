@@ -11,6 +11,7 @@ with all required information
 - Add missing tests
 - Add e2e tests with fake app
 
+- Use gobbing instead of JSON for grpc
 - Add versioning information through code generation, a
 real container image default for jobs and 
 versioning scripts in ./hack folder

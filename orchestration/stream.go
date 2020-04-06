@@ -10,8 +10,12 @@ import (
 )
 
 type Stream struct {
-	clc    *grpc.ClientConn
+	clc    CloseableConn
 	sender pb.Orchestrator_SendResultsClient
+}
+
+type CloseableConn interface {
+	Close() error
 }
 
 func EstablishStream(URI string, ctx context.Context) (*Stream, error) {
