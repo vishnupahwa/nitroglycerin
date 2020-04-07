@@ -96,7 +96,7 @@ func (c *Client) create(ctx context.Context, spec orchestration.NFTJob) {
 
 func (c *Client) CreateAndWatch(ctx context.Context, spec orchestration.NFTJob, watcher func(j *batchv1.Job, err error, running *bool)) {
 	c.create(ctx, spec)
-	watch, err := c.Client.Watch(ctx, c.Client.Namespace, c.jobFrom(spec))
+	watch, err := c.Client.Watch(ctx, c.Client.Namespace, &batchv1.Job{})
 	if err != nil {
 		log.Fatalf("Could not watch Job: %v\n", err)
 	}
@@ -104,6 +104,8 @@ func (c *Client) CreateAndWatch(ctx context.Context, spec orchestration.NFTJob, 
 	for running {
 		j := new(batchv1.Job)
 		_, err := watch.Next(j)
-		watcher(j, err, &running)
+		if *j.Metadata.Name == spec.Scenario {
+			watcher(j, err, &running)
+		}
 	}
 }
