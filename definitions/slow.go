@@ -11,9 +11,9 @@ func slow() scenario.Scenario {
 	return scenario.Scenario{
 		StagesToBe: stages.Builder().
 			// Ramp up to 100 TPS
-			RampUpAndSustain(15000, 5*time.Minute, 10*time.Minute).
+			RampUpAndSustain(15000, 5*time.Minute, 1*time.Second).
 			// Ramp down to 0 TPS
-			RampDown(1 * time.Minute),
+			RampDown(1 * time.Second),
 		Targets: []vegeta.Target{{
 			Method: "POST",
 			URL:    "https://echo-r2oihcniea-ew.a.run.app/playout/live",

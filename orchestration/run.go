@@ -14,6 +14,7 @@ type client interface {
 	Delete(NFTJob)
 }
 
+// TODO this should receive an NFTJob spec instead of taking it as an argument
 func Run(client client, spec NFTJob) (vegeta.Metrics, error) {
 	client.Delete(spec)
 

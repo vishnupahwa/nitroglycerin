@@ -59,6 +59,7 @@ func (o *Orchestrator) Close() {
 	close(o.results)
 }
 
+// TODO Rethink this to make it more testable.
 func startUploadServer() (*Orchestrator, context.CancelFunc) {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	grpcServer := grpc.NewServer()

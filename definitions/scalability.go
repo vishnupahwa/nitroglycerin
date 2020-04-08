@@ -10,23 +10,23 @@ import (
 	"time"
 )
 
-func quick() scenario.Scenario {
+func scalability() scenario.Scenario {
 	return scenario.Scenario{
 		StagesToBe: stages.Builder().
-			// Ramp up to 10 TPS over 5 seconds and sustain for 20 seconds
-			RampUpAndSustain(10, 5*time.Second, 20*time.Second).
+			// Ramp up to 15000 TPS
+			RampUpAndSustain(15000, 5*time.Minute, 10*time.Minute).
 			// Ramp down to 0 TPS
-			RampDown(5 * time.Second),
+			RampDown(1 * time.Minute),
 		Targets: []vegeta.Target{{
 			Method: "POST",
 			URL:    "https://echo-r2oihcniea-ew.a.run.app/playout/live",
-			Body:   createBody(),
-			Header: createHeaders(),
+			Body:   creatLiteBody(),
+			Header: createLiteHeaders(),
 		}},
 	}
 }
 
-func createBody() []byte {
+func creatLiteBody() []byte {
 	type body struct {
 		ContentId string `json:"contentId"`
 	}
@@ -38,9 +38,11 @@ func createBody() []byte {
 	return marshalled
 }
 
-func createHeaders() http.Header {
+func createLiteHeaders() http.Header {
 	headers := http.Header{}
 	headers.Add("Content-Type", "application/json")
-	headers.Add("Number", "30")
+	headers.Add("X-Sky-Signature", "hmacSignature")
+	headers.Add("X-SkyOTT-Provider", "provider")
+	headers.Add("X-SkyOTT-Territory", "territory")
 	return headers
 }
