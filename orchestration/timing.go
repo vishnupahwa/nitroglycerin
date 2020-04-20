@@ -33,7 +33,7 @@ func WaitForStart(at int64) {
 			return
 		}
 
-		log.Println("Time remaining: " + startTime.Sub(time.Now()).String())
+		log.Println("Time remaining: " + time.Until(startTime).String())
 	}
 }
 

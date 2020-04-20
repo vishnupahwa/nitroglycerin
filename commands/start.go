@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"eznft/commands/options"
 	"eznft/definitions"
 	"eznft/orchestration"
@@ -46,7 +45,7 @@ func start(name string, scenarioOpts *options.Scenario) error {
 	ctx := context.Background()
 	s, ok := definitions.NFT[name]
 	if !ok {
-		return errors.New(fmt.Sprintf("Scenario %s not found. Possible options: %v", name, getKeys(definitions.NFT)))
+		return fmt.Errorf("scenario %s not found. Possible options: %v", name, getKeys(definitions.NFT))
 	}
 	if scenarioOpts.StartNext != 0 {
 		scenarioOpts.StartAt = orchestration.CalculateStartAt(now, scenarioOpts.StartNext)
@@ -56,13 +55,13 @@ func start(name string, scenarioOpts *options.Scenario) error {
 
 	log.Println("Running NFT " + name)
 
-	s.Run(ctx, name, scenarioOpts.Multiplier, scenarioOpts.TargetOverride, stream(name, scenarioOpts, ctx))
+	s.Run(ctx, name, scenarioOpts.Multiplier, scenarioOpts.TargetOverride, stream(ctx, name, scenarioOpts))
 	return nil
 }
 
-func stream(name string, scenarioOpts *options.Scenario, ctx context.Context) scenario.Stream {
+func stream(ctx context.Context, name string, scenarioOpts *options.Scenario) scenario.Stream {
 	if scenarioOpts.UploadURI != "" {
-		stream, err := orchestration.EstablishStream(scenarioOpts.UploadURI, ctx)
+		stream, err := orchestration.EstablishStream(ctx, scenarioOpts.UploadURI)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -73,7 +72,7 @@ func stream(name string, scenarioOpts *options.Scenario, ctx context.Context) sc
 
 func getKeys(m map[string]scenario.Scenario) []string {
 	var keys []string
-	for k, _ := range m {
+	for k := range m {
 		keys = append(keys, k)
 	}
 	return keys

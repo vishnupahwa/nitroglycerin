@@ -7,5 +7,7 @@ var NFT = map[string]scenario.Scenario{
 	"example":     example(),
 	"quick":       quick(),
 	"slow":        slow(),
+	"slower":      slower(),
 	"scalability": scalability(),
+	"spike":       spike(),
 }

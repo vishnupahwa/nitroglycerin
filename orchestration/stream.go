@@ -18,7 +18,7 @@ type CloseableConn interface {
 	Close() error
 }
 
-func EstablishStream(URI string, ctx context.Context) (*Stream, error) {
+func EstablishStream(ctx context.Context, URI string) (*Stream, error) {
 	conn, err := grpc.Dial(URI, grpc.WithInsecure())
 	if err != nil {
 		return nil, err

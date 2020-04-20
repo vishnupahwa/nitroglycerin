@@ -52,7 +52,7 @@ func TestUploadingToServer(t *testing.T) {
 	orch, cancelFunc := startUploadServer()
 	defer cancelFunc()
 	ctx := context.Background()
-	stream, err := EstablishStream("localhost:8080", ctx)
+	stream, err := EstablishStream(ctx, "localhost:8080")
 	check.Ok(t, err)
 	result := vegeta.Result{
 		Attack:    "test",

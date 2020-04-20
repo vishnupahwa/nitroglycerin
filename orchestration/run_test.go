@@ -16,7 +16,7 @@ func TestRun(t *testing.T) {
 		MemoryLimit:     "1",
 		CPURequest:      "1",
 		StartTime:       1,
-		OrchestratorUri: "uri",
+		OrchestratorURI: "uri",
 	}
 
 	jobClient := StubbedJobClient{
@@ -38,7 +38,7 @@ func TestRun_fails(t *testing.T) {
 		MemoryLimit:     "1",
 		CPURequest:      "1",
 		StartTime:       1,
-		OrchestratorUri: "uri",
+		OrchestratorURI: "uri",
 	}
 
 	jobClient := StubbedJobClient{

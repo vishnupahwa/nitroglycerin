@@ -28,9 +28,9 @@ func scalability() scenario.Scenario {
 
 func creatLiteBody() []byte {
 	type body struct {
-		ContentId string `json:"contentId"`
+		ContentID string `json:"contentId"`
 	}
-	b := body{ContentId: "contentId"}
+	b := body{ContentID: "contentId"}
 	marshalled, err := json.Marshal(b)
 	if err != nil {
 		log.Fatal(err)

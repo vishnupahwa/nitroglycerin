@@ -43,7 +43,7 @@ func (c *Client) jobFrom(spec orchestration.NFTJob) *batchv1.Job {
 		"--start-at",
 		strconv.FormatInt(spec.StartTime, 10),
 		"--upload-uri",
-		spec.OrchestratorUri,
+		spec.OrchestratorURI,
 		"--multiplier",
 		fmt.Sprintf("%.2f", 1/float64(spec.Pods)),
 	}
@@ -75,7 +75,7 @@ func (c *Client) jobFrom(spec orchestration.NFTJob) *batchv1.Job {
 							Env: []*corev1.EnvVar{
 								{
 									Name:  k8s.String("ORCHESTRATION_URI"),
-									Value: k8s.String(spec.OrchestratorUri),
+									Value: k8s.String(spec.OrchestratorURI),
 								},
 							},
 						},

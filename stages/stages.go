@@ -23,7 +23,7 @@ type Stage struct {
 type StageToBe func(multiplier float64, prev Stage) Stage
 
 // NewRampingStage creates a stage with the provided target transactions per second
-// aiming to steadyily ramp to that rate from 0 over the ramp duration and then sustain
+// aiming to steadily ramp to that rate from 0 over the ramp duration and then sustain
 // that rate for a given sustain duration
 func NewRampingStage(target int, ramp, sustain time.Duration) Stage {
 	pacer, err := NewSteadyUp(
@@ -46,6 +46,8 @@ func NewRampingStage(target int, ramp, sustain time.Duration) Stage {
 	}
 }
 
+// NewRampDownStage creates a stage which ramps down from the previous stage to zero
+// over the provided duration.
 func NewRampDownStage(total time.Duration, prev Stage) Stage {
 	return Stage{
 		Target:      0,

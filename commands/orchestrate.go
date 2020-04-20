@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"errors"
 	"eznft/commands/options"
 	"eznft/definitions"
 	"eznft/job"
@@ -48,7 +47,7 @@ This command itself must be run as a Kubernetes job.
 func orchestrate(name string, opts *options.Orchestration) error {
 	s, ok := definitions.NFT[name]
 	if !ok {
-		return errors.New(fmt.Sprintf("Scenario %s not found. Possible options: %v", name, getKeys(definitions.NFT)))
+		return fmt.Errorf("scenario %s not found. Possible options: %v", name, getKeys(definitions.NFT))
 	}
 	log.Println("Orchestrating scenario " + name)
 	var _ = s.StagesToBe.Build(1 / float64(opts.Pods)) // Check scenario successfully builds
@@ -63,7 +62,7 @@ func orchestrate(name string, opts *options.Orchestration) error {
 		CPURequest:      opts.CPURequests,
 		MemoryLimit:     opts.MemoryLimits,
 		StartTime:       startAt,
-		OrchestratorUri: opts.SelfURI,
+		OrchestratorURI: opts.SelfURI,
 		Args:            opts.Args,
 	}
 	_, err := orchestration.Run(job.CreateClient(), spec)
